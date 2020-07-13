@@ -1,0 +1,33 @@
+# Helm upgrade
+# helm upgrade --debug --install monitoring-prometheus stable/prometheus --values "$PWD/prom.yml" >"$HOME/logs/helm-prom.log"
+
+configmapReload:
+  prometheus:
+    enabled: false # if true, cause permission denied in prometheus server
+  alertmanager:
+    enabled: false
+
+pushgateway:
+  persistentVolume:
+    enabled: true
+
+alertmanager:
+  enabled: false
+
+# Not support ARM yet.
+# https://github.com/kubernetes/kube-state-metrics/issues/1037
+kubeStateMetrics:
+  enabled: false
+
+server:
+  image:
+    repository: prom/prometheus
+    tag: v2.17.1
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    nodePort: 0
+  replicaCount: 1
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000

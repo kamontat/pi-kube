@@ -1,0 +1,26 @@
+# Helm upgrade
+# helm upgrade --debug --install monitoring-grafana stable/grafana --values "$PWD/graf.yml" >"$HOME/logs/helm-graf.log"
+
+# Get admin password
+# kubectl get secret --namespace default monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+
+# Port forwarder
+# kubectl port-forward deployment/monitoring-grafana --address="0.0.0.0" 3000:3000 >"$HOME/logs/graf.log" &
+
+image:
+  repository: grafana/grafana
+  tag: 6.7.2
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+
+service:
+  type: NodePort
+  nodePort: 0
+
+# not support ARM yet.
+# ref: https://github.com/kiwigrid/k8s-sidecar/issues/48
+sidecar:
+  dashboards:
+    enabled: false

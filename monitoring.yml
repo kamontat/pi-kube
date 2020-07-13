@@ -1,0 +1,26 @@
+# Install chart
+# helm install monitoring stable/prometheus-operator --debug --values "$PWD/monitoring.yml" >"$HOME/logs/helm-mon.log"
+
+# Upgrade chart
+# helm upgrade monitoring stable/prometheus-operator --debug --install --values "$PWD/monitoring.yml" >>"$HOME/logs/helm-mon.log"
+
+prometheusOperator:
+  createCustomResource: false
+  admissionWebhooks:
+    enabled: false
+  tlsProxy:
+    enabled: false
+
+# not support ARM yet.
+# ref: https://github.com/kiwigrid/k8s-sidecar/issues/48
+grafana:
+  sidecar:
+    dashboards:
+      enabled: false
+    datasources:
+      enabled: false
+
+# Not support ARM yet.
+# https://github.com/kubernetes/kube-state-metrics/issues/1037
+kubeStateMetrics:
+  enabled: false
